@@ -1,20 +1,20 @@
 import java.util.*;
 
-class Kruskal {
+class Grafo {
     int size;
-    ArrayList<LinkedList<Integer>> adjacenList = new ArrayList<>();
+    ArrayList<LinkedList<Integer>> list = new ArrayList<>();
 
-    public Kruskal(int V) {
+    public Grafo(int V) {
         this.size = V;
         for (int i = 0; i < this.size; i++) {
-            adjacenList.add(new LinkedList<>());
+            list.add(new LinkedList<>());
 
         }
     }
 
-    public void addEdge(int first, int second) {
-        adjacenList.get(first).add(second);
-        adjacenList.get(second).add(first);
+    public void addBorder(int first, int second) {
+        list.get(first).add(second);
+        list.get(second).add(first);
     }
 
     public boolean hasCycle() {
@@ -22,27 +22,27 @@ class Kruskal {
         Arrays.fill(visited, false);
         for (int k = 0; k < this.size; k++)
             if (!visited[k])
-                if (isCycleUtil(k, visited, -1))
+                if (isCycle(k, visited, -1))
                     return true;
         return false;
     }
-    
-    public void removeEdge(int first, int second) {
-        adjacenList.get(first).remove((Integer) second);
-        adjacenList.get(second).remove((Integer) first);
+
+    public void removeBorder(int first, int second) {
+        list.get(first).remove((Integer) second);
+        list.get(second).remove((Integer) first);
     }
 
-    public boolean isCycleUtil(int v, boolean visited[], int parent) {
+    public boolean isCycle(int v, boolean visited[], int parent) {
 
         visited[v] = true;
         Integer w;
 
-        Iterator<Integer> it = adjacenList.get(v).iterator();
+        Iterator<Integer> it = list.get(v).iterator();
         while (it.hasNext()) {
             w = it.next();
 
             if (!visited[w]) {
-                if (isCycleUtil(w, visited, v))
+                if (isCycle(w, visited, v))
                     return true;
             }
 
@@ -56,7 +56,7 @@ class Kruskal {
 
 }
 
-public class Solution {
+public class Kruskal {
 
     static void SortByColumn(int array[][], int col) {
         Arrays.sort(array, new Comparator<int[]>() {
@@ -88,23 +88,22 @@ public class Solution {
         }
 
         SortByColumn(array, 2);
-        int TotalWeight = 0;
-        Kruskal graph = new Kruskal(y);
+        int totalWeight = 0;
+        Grafo graph = new Grafo(y);
 
         for (int i = 0; i < x; i++) {
             int st = array[i][0];
             int en = array[i][1];
             int weight = array[i][2];
-            graph.addEdge(st, en);
+            graph.addBorder(st, en);
 
             if (graph.hasCycle()) {
-                graph.removeEdge(st, en);
-            }
-            else {
-                TotalWeight += weight;
+                graph.removeBorder(st, en);
+            } else {
+                totalWeight += weight;
             }
         }
 
-        System.out.println(TotalWeight);
+        System.out.println(totalWeight);
     }
 }
